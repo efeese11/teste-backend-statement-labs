@@ -1,5 +1,7 @@
 package prosefa.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +15,15 @@ import prosefa.config.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Autenticação", description = "Endpoints de login e geração de token JWT")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
+    @Operation(summary = "Autenticar usuário e retornar token JWT")
+
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request.getEmail().equals("admin@prosefa.com") && request.getSenha().equals("1234")) {
             String token = jwtUtil.generateToken(request.getEmail());

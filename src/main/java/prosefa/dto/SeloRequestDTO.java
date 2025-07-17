@@ -14,9 +14,10 @@ import java.util.UUID;
     @Builder
     public class SeloRequestDTO {
 
-        @NotNull
-        private UUID empresaId;
+    @NotNull(message = "EmpresaId é obrigatório")
+    private UUID empresaId;
 
-        @NotBlank
-        private String produto;
+    @NotBlank(message = "Produto é obrigatório")
+    private String produto;
+
 }

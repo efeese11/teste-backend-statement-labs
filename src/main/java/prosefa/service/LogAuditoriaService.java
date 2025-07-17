@@ -42,4 +42,19 @@ public class LogAuditoriaService {
                 .toList();
     }
 
+    public List<LogAuditoriaDTO> buscarPorEntidade(String entidade) {
+        return repository.findByEntidade(entidade).stream()
+                .map(log -> LogAuditoriaDTO.builder()
+                        .id(log.getId())
+                        .entidade(log.getEntidade())
+                        .acao(log.getAcao())
+                        .usuario(log.getUsuario())
+                        .dataHora(log.getDataHora())
+                        .detalhes(log.getDetalhes())
+                        .build())
+                .toList();
+    }
+
+
+
 }

@@ -19,6 +19,7 @@ public class SecurityConfig {
       return   http
                 .csrf(csrf -> csrf.disable()) // desativa CSRF para facilitar testes com Postman
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login", "/swagger-ui/**", "/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
               .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)

@@ -10,7 +10,6 @@ import prosefa.enums.EstadoSelo;
 import prosefa.enums.StatusEmpresa;
 import prosefa.exception.BusinessException;
 import prosefa.exception.NotFoundException;
-import prosefa.repository.LogAuditoriaRepository;
 import prosefa.repository.SeloFiscalRepository;
 import prosefa.util.CodigoSeloGenerator;
 
@@ -124,4 +123,20 @@ public class SeloService {
                         .build())
                 .toList();
     }
+
+
+    public void deletarPorCodigo(String codigo) {
+        SeloFiscal selo = seloFiscalRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new NotFoundException("Selo não encontrado: " + codigo));
+        seloFiscalRepository.delete(selo);
+
+        logAuditoriaService.registrar(
+                "SeloFiscal",
+                "SELO_EXCLUIDO",
+                "admin",
+                "Selo excluído com código: " + selo.getCodigo()
+        );
+    }
+
+
 }

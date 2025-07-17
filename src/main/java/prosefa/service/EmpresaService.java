@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmpresaService {
 
+    private final LogAuditoriaService logAuditoriaService;
+
 
     private final EmpresaRepository empresaRepository;
 
@@ -43,6 +45,27 @@ public class EmpresaService {
 
 
     }
+
+
+    public EmpresaDTO alterarStatus(UUID id, StatusEmpresa novoStatus, String usuario) {
+        Empresa empresa = buscarEntidadePorId(id);
+        empresa.setStatus(novoStatus);
+        Empresa atualizada = empresaRepository.save(empresa);
+
+        logAuditoriaService.registrar(
+                "Empresa",
+                "STATUS_ALTERADO",
+                usuario,
+                "Status alterado para " + novoStatus + " da empresa: " + empresa.getNome()
+        );
+
+        return mapToDTO(atualizada);
+    }
+
+
+
+
+
 
 
 
@@ -76,4 +99,22 @@ public class EmpresaService {
                 .dataRegistro(empresa.getDataRegistro())
                 .build();
     }
+
+
+
+
+    public void deletar(UUID id) {
+        Empresa empresa = buscarEntidadePorId(id);
+       empresaRepository.delete(empresa);
+
+        logAuditoriaService.registrar(
+                "Empresa",
+                "EMPRESA_EXCLUIDA",
+                "admin",
+                "Empresa excluída: " + empresa.getNome() + " - NIF: " + empresa.getNif()
+        );
+
+
+    }
+
 }
