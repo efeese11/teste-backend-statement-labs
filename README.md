@@ -1,89 +1,93 @@
-# 🧪 Desafio Técnico - Backend Java
-## Programa de Selos Fiscais de Alta Segurança (PROSEFA)
+# 🧪 Desafio Técnico - Backend Java com Spring Boot
+## Sistema de Gerenciamento de Estacionamento
 
-Bem-vindo(a) ao desafio técnico para a vaga de Desenvolvedor(a) Backend no time do STATEMENT LABS. Este teste simula um cenário real da plataforma: a **gestão e validação de Selos Fiscais de Alta Segurança**.
-
----
-
-## 🎯 Objetivo
-
-Você deverá desenvolver uma **API RESTful** para permitir:
-- Registro de empresas autorizadas.
-- Solicitação de selos fiscais.
-- Emissão e validação de selos.
-- Auditoria das ações realizadas.
-
-Este backend deverá seguir boas práticas de desenvolvimento Java, segurança, modelagem de domínio e arquitetura limpa.
+Bem-vindo(a) ao desafio técnico para a vaga de Desenvolvedor(a) Backend no time da STATEMENT LABS.
 
 ---
 
-## 🧱 Tecnologias esperadas
+## Descrição do Problema
 
-Você pode usar o stack com o qual se sentir mais confortável, **desde que atenda aos requisitos**. No entanto, priorizamos o uso de:
-
-- **Java 17+**
-- **Spring Boot**
-- JPA/Hibernate
-- Banco de dados (PostgreSQL ou H2)
-- Maven ou Gradle
-- Testes (JUnit, Mockito)
-- Autenticação (JWT ou básica)
+Você deve desenvolver um sistema backend para gerenciamento de um estacionamento que controla vagas, entrada/saída de veículos e cálculo de tarifas.
 
 ---
 
-## 🗃️ Entidades principais
+## Requisitos Funcionais
 
-### 1. Empresa
-- `id`: UUID
-- `nome`: String
-- `nif`: String (único)
-- `tipo`: enum (`FABRICANTE`, `IMPORTADOR`)
-- `status`: enum (`ATIVA`, `SUSPENSA`, `BLOQUEADA`)
-- `dataRegistro`: LocalDateTime
+1. Gestão de Vagas
+   - O estacionamento tem 50 vagas fixas
+   - Cada vaga tem um identificador único e status (LIVRE, OCUPADO)
+   - Deve ser possível listar vagas disponíveis
 
-### 2. SeloFiscal
-- `id`: UUID
-- `codigo`: String (único, gerado automaticamente, ex: `PROSEFA-2025-000001`)
-- `empresa`: referência à Empresa
-- `produto`: String
-- `dataEmissao`: LocalDateTime
-- `estado`: enum (`PENDENTE`, `EMITIDO`, `VALIDADO`, `INVALIDADO`)
+2. Registro de Entrada de Veículo
+   - Registrar entrada: placa do veículo, hora de entrada
+   - Atribuir automaticamente uma vaga disponível
+   - Retornar ticket com ID, placa, vaga e hora de entrada
 
-### 3. LogAuditoria
-- `id`: UUID
-- `entidade`: String (ex: `SeloFiscal`, `Empresa`)
-- `acao`: String (ex: `VALIDACAO_REALIZADA`, `SOLICITACAO_EMITIDA`)
-- `usuario`: String
-- `dataHora`: LocalDateTime
-- `detalhes`: JSON ou texto
+3. Registro de Saída de Veículo
+   - Registrar saída: ticket ID ou placa do veículo
+   - Calcular tempo de permanência
+   - Calcular valor a pagar conforme regra de negócio
+   - Liberar a vaga
 
----
+4. Cálculo de Tarifa
+   - Até 6 horas: 300 Kz por hora (proporcional)
+   - Após 6 horas: 200 Kz por hora adicional
+   - Exemplo: 8 horas = (6 × 300) + (2 × 200) = 2200 Kz
 
-## 🔐 Regras de negócio
-
-- Apenas empresas com status `ATIVA` podem solicitar selos.
-- O código do selo deve ser **gerado sequencialmente** com prefixo `PROSEFA-<ano>-<sequência>`.
-- Um selo só pode ser **validado uma vez**.
-- É necessário registrar um **log de auditoria** a cada ação sensível (emissão, validação, bloqueio, etc).
-- Opcional: bloquear a solicitação de selos por empresas com selos anteriores **não validados** após 30 dias.
+5. Consultas
+   - Vagas disponíveis/ocupadas
+   - Histórico de estadias
+   - Veículos atualmente estacionados
 
 ---
 
+## Requisitos Técnicos
+
+### Stack Tecnológica
+- Java 17+ com Spring Boot 3.x
+- Gradle como build tool
+- Banco de dados PostgreSQL em container Docker
+- DDD (Domain-Driven Design)
+- Clean Architecture com camadas:
+  - Domain
+  - Application
+  - Infrastructure
+  - Presentation
+- Clean Code (princípios SOLID, nomes significativos, etc.)
+- TDD (opcional, mas recomendado)
 
 ---
 
-## ✅ O que será avaliado
+## Sugestão de endpoints REST
 
-- Clareza e organização do código
-- Modelagem correta das entidades e regras
-- Segurança (ex: validações, autenticação)
-- Boas práticas REST
-- Testes automatizados
-- Qualidade do README e instruções de execução
+POST   /api/parking/check-in        # Registrar entrada
+POST   /api/parking/check-out       # Registrar saída
+GET    /api/parking/spots           # Listar vagas
+GET    /api/parking/spots/available # Vagas disponíveis
+GET    /api/parking/active          # Veículos estacionados
+GET    /api/parking/history         # Histórico
+
+### Requisitos Não Funcionais
+- Validação de dados de entrada
+- Tratamento de erros apropriado
+- Documentação básica da API
+- Scripts Docker para banco de dados
+- Testes unitários para domínio
+- Testes de integração para controllers
+
+### Critérios de Avaliação
+1. Arquitetura: Seguimento da Clean Architecture e DDD
+2. Segurança (ex: validações, autenticação)
+3. Código: Qualidade, legibilidade, princípios SOLID
+4. Funcionalidade: Implementação correta dos casos de uso
+5. Persistência: Uso adequado do banco de dados
+6. Docker: Configuração correta do container
+7. Testes: Cobertura e qualidade dos testes (se TDD for aplicado)
+8. Qualidade do README e instruções de execução
 
 ---
 
-## 🚀 Como submeter
+## Como submeter
 
 1. Faça um fork ou clone deste repositório.
 2. Implemente a sua solução em uma branch chamada `desafio-{seu-nome}`.
@@ -94,7 +98,7 @@ Você pode usar o stack com o qual se sentir mais confortável, **desde que aten
 
 ---
 
-## 💡 Dicas
+## Dicas
 
 - Fique à vontade para usar camadas como `Controller`, `Service`, `Repository`, `DTOs`, etc.
 - Se quiser, use Swagger/OpenAPI para documentar os endpoints.
