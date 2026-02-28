@@ -54,6 +54,7 @@ export default class CheckOutUseCase {
       totalAmount = firstSixHours + remainingValue;
     }
 
+
     await this.ticketRepository.updateTicket(
       ticket.id,
       true,
