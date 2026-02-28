@@ -9,7 +9,6 @@ export default class CreateSpotUseCase {
     private ISpotRepository: ISpotRepository,
     private IParkingRepository: IParkingRepository
   ) {}
-
   
   public async execute({name,parkingId}: parkingPayload) {
 
