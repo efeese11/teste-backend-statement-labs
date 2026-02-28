@@ -10,6 +10,7 @@ export default class CreateSpotUseCase {
     private IParkingRepository: IParkingRepository
   ) {}
   
+  
   public async execute({name,parkingId}: parkingPayload) {
 
     const spotExists = await this.ISpotRepository.checkSpot(name);

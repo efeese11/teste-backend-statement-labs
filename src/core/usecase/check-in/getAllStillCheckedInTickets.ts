@@ -8,6 +8,7 @@ export default class GetAllStillCheckedInTicketsUseCase {
     private TicketRepository: TicketRepository,
   ) {}
 
+  
   public async execute(): Promise<any> {
 
     return await this.TicketRepository.getAllStillCheckedInTickets();
