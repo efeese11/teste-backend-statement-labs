@@ -1,0 +1,33 @@
+services:
+
+    app:
+
+        build: .
+        container_name: parking-api
+        ports:
+            - 5000:5000
+        depends_on:
+             - database
+  
+        environment:
+             DATABASE_URL: "parking-db"
+
+    database:
+
+        container_name: parking-db
+        image: bitnami/postgresql:latest
+        restart: always
+        ports:
+            - 5432:5432
+
+        environment:
+
+            POSTGRES_USER: "username"
+            POSTGRES_PASSWORD: "password"
+            POSTGRES_DB: "${POSTGRES_DB}"
+
+        volumes:
+            - parking_pg_data:/bitnami/postgresql
+
+volumes:
+    parking_pg_data:
