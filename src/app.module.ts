@@ -6,7 +6,6 @@ import { CheckInModule } from './infra/http/check-in/check-in.module';
 import { CheckoutModule } from './infra/http/checkout/checkout.module';
 
 @Module({
-  imports: [DatabaseModule,ParkingModule, SpotModule,CheckInModule],
-
+  imports: [DatabaseModule,ParkingModule, SpotModule,CheckInModule]
 })
 export class AppModule {}
